@@ -108,7 +108,7 @@ class Action(pydantic.BaseModel):
 
     account: Annotated[str, pydantic.types.StringConstraints(max_length=13)]
     name: str
-    authorization: pydantic.conlist(Authorization, min_length=1, max_length=10)
+    authorization: pydantic.conlist(Authorization, min_length=1, max_length=100)
     data: List[Data]
 
     @pydantic.field_validator("data", "authorization")
@@ -147,7 +147,7 @@ class LinkedAction(Action):
 
     account: Annotated[str, pydantic.types.StringConstraints(max_length=13)]
     name: str
-    authorization: pydantic.conlist(Authorization, min_length=1, max_length=10)
+    authorization: pydantic.conlist(Authorization, min_length=1, max_length=100)
     data: List[Data]
     net: Net
 
@@ -206,7 +206,7 @@ class Transaction(pydantic.BaseModel):
     chain_id: Optional[str]
     """
 
-    actions: pydantic.conlist(Action, min_length=1, max_length=10)
+    actions: pydantic.conlist(Action, min_length=1, max_length=100)
     expiration_delay_sec: Annotated[int, pydantic.Field(ge=0)] = 600
     delay_sec: Annotated[int, pydantic.Field(ge=0)] = 0
     max_cpu_usage_ms: Annotated[int, pydantic.Field(ge=0)] = 0
@@ -257,7 +257,7 @@ class LinkedTransaction(Transaction):
     It becomes a SignedTransaction when you sign it.
     """
 
-    actions: pydantic.conlist(LinkedAction, min_length=1, max_length=10)
+    actions: pydantic.conlist(LinkedAction, min_length=1, max_length=100)
     net: Net
     chain_id: str
     ref_block_num: int
@@ -325,7 +325,7 @@ class SignedTransaction(LinkedTransaction):
     Also you can sign it again.
     """
 
-    signatures: pydantic.conlist(str, min_length=1, max_length=10)
+    signatures: pydantic.conlist(str, min_length=1, max_length=100)
 
     @pydantic.field_validator("signatures")
     def _transform_to_tuple(cls, v):
